@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Здравствуйте, {{ username }}. Новая статья в твоём любимом разделе {{ category }}!'</h2>
+    <p> {{ post.text|truncatechars:50 }} </p>
+
+    {% for key, value in post.CATEGORY_CHOICES %}
+        {% if key == post.categoryType %}
+            <span><b>{{value}}</b>,</span>
+        {% endif %}
+    {% endfor %}
+    <span>дата публикации: {{ post.dateCreation|date:'d-M-Y f' }}, рейтинг: {{ post.rating }} ({{ post.author }})</span></br>
+    <span>Категория: {{ category }}</span>
+    <a href="http://127.0.0.1:8000/news/{{post.id}}" class="btn btn-primary">Прочитать статью на сайте</a>
+
+</body>
+</html>

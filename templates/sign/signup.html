@@ -1,0 +1,23 @@
+{% extends 'flatpages/default.html' %}
+{% load bootstrap4 %}
+{% block title %}Sign up{% endblock %}
+{% block content %}
+
+{% if user.is_authenticated %}
+	<p>Вы уже выполнили вход.</p>
+    <a class="btn btn-secondary" href="/account/logout/" role="button">Выйти из аккаунта</a>
+
+{% else %}
+	<h2> Регистрация нового пользователя:</h2></br>
+	<form method="post">
+	{% csrf_token %}
+
+	{% bootstrap_form form layout='horizontal' %}
+	<input type="hidden" name="next" value="{{ next }}">
+	{% buttons submit='Регистрация' %}{% endbuttons %}
+
+	</form>
+{% endif %}
+
+
+{% endblock content %}

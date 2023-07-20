@@ -1,0 +1,103 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+
+
+{% block title %}
+Search
+{% endblock title %}
+
+{% block content %}
+
+  <style>
+   a {color: black; text-decoration: none;}
+   a:visited {color: black /* Цвет посещенной ссылки */}
+   a:hover {color: blue; /* Цвет ссылки при наведении */}
+  </style>
+    <h1>Поиск публикаций:</h1>
+
+
+            <form method="GET">
+            <div style="float:left; width:75%; height:45px; line-height:20px">
+
+                <label for="dateCreation">Начиная с даты:</label>
+                <input type="date" id="dateCreation" name="dateCreation__gt">
+
+                <label for="title">По названию:</label>
+                <input type="text" id="title" name="title__icontains">
+
+                <label for="author">По автору:</label>
+                <select name="author" id="author">
+                    <option value="0">---------</option>
+                    <option value="1">Иванов А.Н.</option>
+                    <option value="2">Петров В.В.</option>
+                    <option value="3">Сидоров А.А.</option>
+                </select>
+            </div>
+            <div style="float:left; width:25%; height:45px; line-height:35px">
+                <button type="submit" class="btn btn-secondary">search</button>
+            </div>
+            </form>
+        </br>
+        <span style ="color: grey;">Общее количество всех публикаций на сайте: {{ all_posts|length }}</span></br>
+        <span style ="color: grey;">Найдено: {{ paginator.count }} публикаций. Выведено по {{ list_in_page }} публикаций на странице, всего страниц: {{ paginator.num_pages }}</span>
+
+        <hr>
+
+
+        {% if post_search %}
+            {% for itemnews in object_list %}
+            {% autoescape off %}
+            <a href="{{ itemnews.id }}" style="font-size: 20px;"><b>{{ itemnews.title|censor }}</b></a></br>
+            {% endautoescape %}
+            {% for key, value in itemnews.CATEGORY_CHOICES %}
+                {% if key == itemnews.categoryType %}
+                    <span><b>{{value}}</b>,</span>
+                {% endif %}
+            {% endfor %}
+            <span>дата публикации: {{ itemnews.dateCreation|date:'d.M.Y' }}, рейтинг: {{ itemnews.rating }} ({{ itemnews.author }})</span></br>
+            <span>Категория: </span>
+            {% for category in itemnews.postCategory.all %}
+                <span>{{ category.name}} </span>
+            {% endfor %}
+            {% autoescape off %}
+            </br>{{ itemnews.text|truncatechars:50|censor }}</br></br>
+            {% endautoescape %}
+            {% endfor %}
+
+        {% else %}
+            <h2>По заданным параметрам поиска публикаций нет!</h2>
+        {% endif %}
+    <hr>
+
+{% load my_tags %}
+{% comment %} подгружаем tamplate tags для правильной генерации ссылок. До этого мы создали файлы в папке templatetags {% endcomment %}
+
+<!-- Проверяем что поддерживается постраничный вывод -->
+{% if is_paginated %}
+<span>Страницы: </span>
+  {% if page_obj.has_previous %}
+    <a href="?{% param_replace page=1 %}">Первая</a><span>&nbsp;</span>
+    <a href="?{% param_replace page=page_obj.previous_page_number %}"><</a>
+  {% endif %}
+
+<!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
+{% for num in page_obj.paginator.page_range %}
+    {% if page_obj.number == num %}
+<a><b>{{ page_obj.number }}</b></a><span>&nbsp;</span>
+    {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'2' %}
+        <a href="?{% param_replace page=num %}">{{ num }}</a><span>&nbsp;</span>
+    {% endif %}
+{% endfor %}
+
+  <!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
+  {% if page_obj.has_next %}
+    <a href="?{% param_replace page=page_obj.next_page_number %}">></a><span>&nbsp;</span>
+    <a href="?{% param_replace page=paginator.num_pages %}">Последняя</a>
+  {% endif %}
+
+  <span style ="color: grey;">&nbsp;&nbsp;(Показаны публикации с {{ page_obj.start_index }} по {{ page_obj.end_index }})</span>
+{% endif %}
+</br></br>
+<input type=button value="Назад" class="btn btn-secondary" onClick="javascript:history.go(-1);">
+</br></br>
+{% endblock content %}

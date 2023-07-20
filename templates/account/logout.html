@@ -1,0 +1,24 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Sign Out" %}{% endblock %}
+
+{% block content %}
+</br>
+<h4>Регистрация и идентификация средствами allauth</h4>
+</br>
+<h1>{% trans "Sign Out" %}</h1>
+<h4>Вы выполнили вход как: {{user}} ({{user.last_name}} {{user.first_name}})</h4>
+<p>{% trans 'Вы уверены, что хотите выйти?' %}</p>
+
+<form method="post" action="{% url 'account_logout' %}">
+  {% csrf_token %}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+  {% endif %}
+  <button type="submit" class="btn btn-secondary">{% trans 'Выход' %}</button>
+</form>
+
+
+{% endblock %}

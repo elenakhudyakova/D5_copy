@@ -1,0 +1,22 @@
+{% extends 'flatpages/default.html' %}
+{% load bootstrap4 %}
+{% load custom_filters %}
+
+{% block title %}Create post{% endblock title %}
+
+{% block content %}
+
+    <div>
+      </br>
+      <h3>Новая публикация</h3></br>
+    </div>
+
+	<form method="post">
+		{% csrf_token %}
+		{% bootstrap_form form layout='horizontal' %}
+        <a>*Примечание: для выбора сразу нескольких категорий удерживайте клавишу "Ctrl" </a></br></br>
+		<input class="btn btn-secondary" type="submit" value="Сохранить">
+	</form>
+    <input type=button value="Назад" class="btn btn-secondary" onClick="javascript:history.go(-1);">
+
+{% endblock content %}

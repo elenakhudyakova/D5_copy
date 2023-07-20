@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+
+{% block content %}
+<h2>
+  Страница авторизованного пользователя {{request.user.username}}
+</h2>
+
+<div>
+  Здесь может содержаться персональная информация для каждого пользователя
+<div>
+
+<a class="btn btn-primary" href="{% url 'sign:logout' %}">
+  Выйти
+</a>
+
+{% if is_not_premium %}
+
+<a class="btn btn-info" href="{% url 'protected:upgrade' %}">
+  Хочу Premium!
+</a>
+{% else %}
+<h3>
+  Вы в группе "Premium"
+</h3>
+{% endif %}
+
+{% endblock content %}

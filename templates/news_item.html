@@ -1,0 +1,30 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+
+{% block title %}
+Подробнее о новости
+{% endblock title %}
+
+{% block content %}
+    {% autoescape off %}
+    <h2>{{ news_item.title|censor }}</h2>
+    <span>{{ news_item.text|censor }}</br></span>
+    {% endautoescape %}
+    <hr>
+        {% for key, value in news_item.CATEGORY_CHOICES %}
+            {% if key == news_item.categoryType %}
+                <span><b>{{value}}</b>,</span>
+            {% endif %}
+        {% endfor %}
+        <span>дата публикации: {{ news_item.dateCreation|date:'d-M-Y H:i' }}, рейтинг: {{ news_item.rating }} ({{ news_item.author }})</span></br>
+        <span>Категория: </span>
+        {% for category in news_item.postCategory.all %}
+            <span>{{ category.name}} </span>
+        {% endfor %}
+    </br></br>
+        <a href="/news" class="btn btn-secondary">&lt;&lt; Все новости</a>
+        <a href="{{ request.get_full_path }}/edit" class="btn btn-secondary">Редактировать</a>
+        <a href="{{ request.get_full_path }}/delete" class="btn btn-secondary">Удалить</a>
+
+{% endblock content %}
+

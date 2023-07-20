@@ -1,0 +1,21 @@
+{% extends 'flatpages/default.html' %}
+{% load bootstrap4 %}
+{% load custom_filters %}
+
+{% block title %}Edit post{% endblock title %}
+
+{% block content %}
+
+    <div>
+      </br>
+      <h3>Редактирование публикации:</h3></br>
+    </div>
+
+	<form method="post">
+		{% csrf_token %}
+		{% bootstrap_form form layout='horizontal' %}
+		<input class="btn btn-secondary" type="submit" value="Сохранить">
+	</form>
+    <input type=button value="Назад" class="btn btn-secondary" onClick="javascript:history.go(-1);">
+
+{% endblock content %}

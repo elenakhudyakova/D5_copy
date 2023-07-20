@@ -1,0 +1,38 @@
+{% extends 'flatpages/default.html' %}
+{% load bootstrap4 %}
+{% load custom_filters %}
+
+{% block title %}Delete post{% endblock title %}
+
+{% block content %}
+
+    <div>
+      </br>
+      <h3>Удаление публикации:</h3></br>
+    </div>
+
+    {% autoescape off %}
+    <h2>{{ post.title|censor }}</h2>
+    <span>{{ post.text|censor }}</br></span>
+    {% endautoescape %}
+    <hr>
+        {% for key, value in post.CATEGORY_CHOICES %}
+            {% if key == post.categoryType %}
+                <span><b>{{value}}</b>,</span>
+            {% endif %}
+        {% endfor %}
+        <span>дата публикации: {{ post.dateCreation|date:'d-M-Y f' }}, рейтинг: {{ post.rating }} ({{ post.author }})</span></br>
+        <span>Категория: </span>
+        {% for category in post.postCategory.all %}
+            <span>{{ category.name}} </span>
+        {% endfor %}
+    </br></br>
+    <h4>Подтвердите удаление публикации:</h4>
+
+    <form method="POST">
+    {% csrf_token %}
+    <input type="submit" class="btn btn-secondary" style="background: red" value="подтвердить"></form>
+    <input type=button value="Назад" class="btn btn-secondary" onClick="javascript:history.go(-1);">
+
+
+{% endblock content %}

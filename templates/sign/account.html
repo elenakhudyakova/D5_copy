@@ -1,0 +1,27 @@
+{% extends 'flatpages/default.html' %}
+{% load bootstrap4 %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+
+
+    </br></br>
+    <h3>Ваш профиль: </h3>
+    </br>
+    <h5>User name: {{user.username}}</h5>
+    <h5>Last name: {{user.last_name}}</h5>
+    <h5>First name: {{user.first_name}}</h5>
+    <h5>E-mail: {{user.email}}</h5>
+    <a style="font-size:20px">Groups: </a>
+    {% if request.user.groups.all.0.name == 'common' %}| common |{% endif %}
+    {% if request.user.groups.all.1.name == 'authors' %} authors |{% endif %}
+
+    {% if is_not_authors %}
+    <button> <a href="/sign/add_authors/"> Стать автором</a> </button>
+    {% endif %}
+    </br> </br>
+    <a class="btn btn-secondary" href="/sign/edit/" role="button">Изменить даные</a>
+    </br></br>
+    <a class="btn btn-secondary" href="/account/logout/" role="button">Выйти из аккаунта</a>
+
+
+{% endblock %}
